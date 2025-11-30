@@ -1,36 +1,292 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+📦 Admin Dashboard — Next.js + TailwindCSS + Shadcn + React Query
 
-## Getting Started
+یک داشبورد مدرن، کاملاً Modular و مبتنی بر Feature Architecture
+با استفاده از API آماده (FakeStore API) جهت نمایش لیست محصولات، کاربران و سفارش‌ها.
 
-First, run the development server:
+این پروژه با تمرکز بر Clean Architecture، UX مناسب، سرعت بالا، و توسعه‌پذیری ساخته شده است.
 
-```bash
+🚀 تکنولوژی‌ها
+Frontend
+
+Next.js 15 (App Router + React Server Components)
+
+React 19 + React Compiler
+
+TypeScript
+
+TailwindCSS
+
+Shadcn/UI
+
+Lucide Icons
+
+Data & State
+
+TanStack React Query
+
+Zustand
+
+Axios / Fetch Wrapper
+
+Tools
+
+ESLint + Prettier + Husky + lint-staged
+
+Commitlint (Conventional Commits)
+
+GitHub Actions (CI)
+
+Vercel Deployment
+
+Optional
+
+Storybook
+
+Lighthouse Optimization
+
+Dark/Light Theme
+
+📁 ساختار پوشه‌ها (Feature-Based Architecture)
+src/
+  app/
+    (auth)/
+      login/page.tsx
+    (dashboard)/
+      layout.tsx
+      page.tsx
+      products/page.tsx
+      products/[id]/page.tsx
+      users/page.tsx
+      users/[id]/page.tsx
+      orders/page.tsx
+      orders/[id]/page.tsx
+
+  features/
+    products/
+      api/
+        queries.ts
+        types.ts
+      components/
+        products-table.tsx
+        product-filters.tsx
+        product-details.tsx
+      hooks/
+        use-product-filters.ts
+      types.ts
+
+    users/
+      api/
+      components/
+      hooks/
+      types.ts
+
+    orders/
+      api/
+      components/
+      hooks/
+      types.ts
+
+  components/
+    layout/
+      sidebar.tsx
+      topbar.tsx
+    ui/               # Shadcn components
+    charts/
+    feedback/
+
+  core/
+    lib/
+      api-client.ts
+      react-query-client.ts
+    config/
+      routes.ts
+      query-keys.ts
+    utils/
+      formatters.ts
+
+  stores/
+    sidebar.store.ts
+    theme.store.ts
+
+  styles/
+    globals.css
+
+🧠 معماری پروژه
+
+این پروژه بر اساس Feature-Based Structure ساخته شده است:
+
+API → React Query → Feature Layer → Components → Page
+
+مزایا:
+
+هر feature کاملاً مستقل و مقیاس‌پذیر است
+
+توسعه و نگهداری آسان‌تر
+
+separation of concerns
+
+readability بالا
+
+تست‌پذیری بهتر
+
+🔌 API مورد استفاده
+
+این پروژه از API آماده FakeStore API برای نمایش داده‌ها استفاده می‌کند:
+
+Products: https://fakestoreapi.com/products
+
+Users: https://fakestoreapi.com/users
+
+Carts/Orders: https://fakestoreapi.com/carts
+
+⚙️ نصب و اجرای پروژه
+1. Clone پروژه
+git clone <your-repo-url>
+cd <project-folder>
+
+2. نصب پکیج‌ها
+npm install
+
+3. اضافه کردن Shadcn (در صورت نیاز)
+npx shadcn@latest init
+
+4. اجرای پروژه
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+🎨 صفحات پروژه
+۱) Login Page
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+ورود ساده با Fake Auth
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+ذخیره token در localStorage
 
-## Learn More
+۲) Dashboard Page
 
-To learn more about Next.js, take a look at the following resources:
+کارت‌های آماری
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+نمودار دسته‌بندی محصولات
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+لیست آخرین سفارش‌ها
 
-## Deploy on Vercel
+۳) Products
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+جدول محصولات
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+سرچ و فیلتر
+
+دسته‌بندی
+
+Product Detail Page
+
+۴) Users
+
+لیست کاربران
+
+User Detail + لیست سفارش‌های کاربر
+
+۵) Orders
+
+جدول سفارش‌ها
+
+جزئیات سفارش (Order Detail)
+
+📊 Performance
+
+استفاده از React Query Caching
+
+React Compiler فعال
+
+Lazy Loading صفحات سنگین
+
+Optimized Images
+
+استفاده از Skeleton Loading (Shadcn)
+
+استفاده از memo و useCallback در بخش‌های حساس
+
+🔒 مدیریت State
+React Query → server state
+
+مدیریت داده API
+
+caching
+
+refetching
+
+pagination
+
+Zustand → client state
+
+Theme (dark/light)
+
+Sidebar toggle
+
+فیلترهای global
+
+🧪 تست (Optional)
+
+این قسمت در صورت نیاز اضافه می‌شود:
+
+Jest + React Testing Library
+
+تست کامپوننت‌ها:
+
+Table
+
+ProductCard
+
+Sidebar
+
+🔄 CI/CD
+
+Pipeline ساده GitHub Actions:
+
+نصب
+
+lint
+
+build
+
+تست (در صورت وجود)
+
+Deployment اتوماتیک روی Vercel
+
+🗺️ بهبودهای آینده (Roadmap)
+
+ اضافه کردن Storybook
+
+ اضافه کردن Chartهای مختلف (Pie/Line/Area)
+
+ اضافه کردن فرم ساخت محصول
+
+ اضافه کردن real-time updates
+
+ اضافه کردن mock-auth پیشرفته‌تر
+
+ اضافه کردن Role-Based Access
+
+🤝 مشارکت (Contribution Guide)
+
+۱. Fork کنید
+۲. یک Branch جدید بسازید:
+
+git checkout -b feature/my-feature
+
+
+۳. Commit استاندارد:
+
+git commit -m "feat(products): add product table sorting"
+
+
+۴. Pull Request بزنید.
+
+🧑‍💻 سازنده
+
+Your Name
+Frontend Developer / React Engineer
+LinkedIn:
+Website:
+
+⭐ اگر پروژه مفید بود لطفاً Star بدید!
+
+این README کاملاً آماده کپی‌کردن داخل GitHub است.
