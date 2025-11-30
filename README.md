@@ -1,3 +1,14 @@
+███╗   ██╗ ███████╗██╗  ██╗████████╗   ⚡ ADVANCED ADMIN DASHBOARD
+████╗  ██║ ██╔════╝██║ ██╔╝╚══██╔══╝   NEXT.JS 15 • SHADCN UI • TAILWIND • REACT QUERY
+██╔██╗ ██║ █████╗  █████╔╝    ██║      FEATURE-BASED ARCHITECTURE • HIGH PERFORMANCE
+██║╚██╗██║ ██╔══╝  ██╔═██╗    ██║      
+██║ ╚████║ ███████╗██║  ██╗   ██║      CLEAN • MODULAR • SCALABLE
+╚═╝  ╚═══╝ ╚══════╝╚═╝  ╚═╝   ╚═╝
+
+
+
+
+
 📦 Admin Dashboard — Next.js + TailwindCSS + Shadcn + React Query
 
 یک داشبورد مدرن، کاملاً Modular و مبتنی بر Feature Architecture
