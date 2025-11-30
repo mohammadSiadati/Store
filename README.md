@@ -1,3 +1,4 @@
+
 📦 Admin Dashboard — Next.js + TailwindCSS + Shadcn + React Query
 
 یک داشبورد مدرن، کاملاً Modular و مبتنی بر Feature Architecture
@@ -280,12 +281,6 @@ git commit -m "feat(products): add product table sorting"
 
 ۴. Pull Request بزنید.
 
-🧑‍💻 سازنده
-
-Your Name
-Frontend Developer / React Engineer
-LinkedIn:
-Website:
 
 ⭐ اگر پروژه مفید بود لطفاً Star بدید!
 
