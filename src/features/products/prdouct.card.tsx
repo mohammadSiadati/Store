@@ -174,7 +174,7 @@ export default function ProductsPage() {
                     className="
                       flex w-full items-center justify-center gap-2 text-xs
                       transition-colors
-                      group-hover:bg-primary group-hover:text-black
+                      group-hover:bg-primary group-hover:text-amber-400
                     "
                     onClick={(e) => {
                       e.stopPropagation();
