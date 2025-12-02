@@ -113,7 +113,7 @@ export default function DashboardPage() {
         <div className="space-y-1">
           <div className="inline-flex items-center gap-2 rounded-full border bg-muted/40 px-3 py-1 text-xs text-muted-foreground">
             <Activity className="h-3 w-3" />
-            Realtime store overview
+            Realtime store overviewsssssssss
           </div>
           <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">
             Welcome back, Admin
