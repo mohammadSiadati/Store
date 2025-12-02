@@ -1,34 +1,42 @@
 'use client';
 
+import Link from 'next/link';
+
 export default function Footer() {
   return (
-    <footer className="border-t bg-background/80 backdrop-blur supports-backdrop-filter:bg-background/60">
-      <div className="flex h-14 items-center justify-between px-6 text-sm text-muted-foreground">
-        {/* Left: Copyright */}
-        <p className="text-xs">
-          © {new Date().getFullYear()} Your Dashboard. All rights reserved.
-        </p>
-
-        {/* Right: Links */}
-        <div className="flex items-center gap-4">
-          <a
+    <footer className="bg-linear-to-r from-indigo-600 to-purple-600 text-white py-8 mt-8">
+      <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+        <div className="text-center md:text-left mb-4 md:mb-0 flex">
+          <p className="text-sm flex text-center items-center">
+            © {new Date().getFullYear()}
+            Created with ❤️ by [seyed mohammad siadati] |{' '}
+            <Link
+              href="https://github.com/mohammadSiadati"
+              className="text-blue-400"
+            >
+              Visit my GitHub
+            </Link>
+          </p>
+        </div>
+        <div className="flex gap-6 items-center text-sm">
+          <Link
             href="#"
-            className="hover:text-foreground transition-colors duration-200"
+            className="hover:text-gray-200 transition duration-300 transform hover:scale-105"
           >
-            Privacy
-          </a>
-          <a
+            Privacy Policy
+          </Link>
+          <Link
             href="#"
-            className="hover:text-foreground transition-colors duration-200"
+            className="hover:text-gray-200 transition duration-300 transform hover:scale-105"
           >
-            Terms
-          </a>
-          <a
+            Terms of Service
+          </Link>
+          <Link
             href="#"
-            className="hover:text-foreground transition-colors duration-200"
+            className="hover:text-gray-200 transition duration-300 transform hover:scale-105"
           >
             Support
-          </a>
+          </Link>
         </div>
       </div>
     </footer>

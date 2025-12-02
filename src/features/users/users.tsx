@@ -1,11 +1,10 @@
-/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { useProductsQuery } from '@/features/products/api/queries';
-import type { Product } from '@/features/products/api/types';
+import { useUsersQuery } from '@/features/users/api/queries';
+import type { User } from '@/features/users/api/types';
 
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -17,59 +16,62 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ShoppingCart } from 'lucide-react';
-import { useCartStore } from '@/core/store/cart.store';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Phone, Mail, User2 } from 'lucide-react';
 
 const cardVariants = {
   initial: { opacity: 0, y: 10 },
   animate: { opacity: 1, y: 0 },
 };
 
-export default function ProductsPage() {
+export default function UsersPage() {
   const router = useRouter();
-  const { data, isLoading, isError } = useProductsQuery();
-  const addItem = useCartStore((state) => state.addItem);
+  const { data, isLoading, isError } = useUsersQuery();
 
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const pageSize = 8;
 
-  const filteredProducts = useMemo(() => {
+  const filteredUsers = useMemo(() => {
     if (!data) return [];
     if (!search.trim()) return data;
 
     const term = search.toLowerCase();
 
-    return data.filter((product: Product) => {
+    return data.filter((user: User) => {
       return (
-        product.title.toLowerCase().includes(term) ||
-        product.category.toLowerCase().includes(term)
+        user.fullName.toLowerCase().includes(term) ||
+        user.email.toLowerCase().includes(term) ||
+        user.username.toLowerCase().includes(term) ||
+        user.city.toLowerCase().includes(term)
       );
     });
   }, [data, search]);
 
-  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / pageSize));
+  const totalPages = Math.max(1, Math.ceil(filteredUsers.length / pageSize));
   const currentPage = Math.min(page, totalPages);
 
-  const paginatedProducts = useMemo(() => {
+  const paginatedUsers = useMemo(() => {
     const start = (currentPage - 1) * pageSize;
     const end = start + pageSize;
-    return filteredProducts.slice(start, end);
-  }, [filteredProducts, currentPage, pageSize]);
+    return filteredUsers.slice(start, end);
+  }, [filteredUsers, currentPage, pageSize]);
+
+  const goToOrders = (userId: number) => {
+    router.push(`/orders?userId=${userId}`);
+  };
 
   const goToPage = (p: number) => {
     if (p < 1 || p > totalPages) return;
     setPage(p);
   };
 
-  const handleAddToCartAndGo = (product: Product) => {
-    addItem(product, 1);
-    router.push('/cart');
-  };
-
-  const handleCardClick = (product: Product) => {
-    addItem(product, 1);
-    router.push('/cart');
+  const getInitials = (name: string) => {
+    const parts = name.split(' ').filter(Boolean);
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (
+      (parts[0][0] ?? '').toUpperCase() + (parts[1][0] ?? '').toUpperCase()
+    );
   };
 
   return (
@@ -81,15 +83,15 @@ export default function ProductsPage() {
         transition={{ duration: 0.25, ease: 'easeOut' }}
       >
         <div>
-          <h2 className="text-2xl font-semibold tracking-tight">Products</h2>
+          <h2 className="text-2xl font-semibold tracking-tight">Users</h2>
           <p className="text-sm text-muted-foreground">
-            Discover products and add them to the cart with one click.
+            Manage your customers and view their orders.
           </p>
         </div>
 
         <div className="w-full max-w-xs">
           <Input
-            placeholder="Search products..."
+            placeholder="Search by name, email, username or city..."
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
@@ -107,11 +109,16 @@ export default function ProductsPage() {
               key={i}
               className="overflow-hidden rounded-xl border bg-card/60 backdrop-blur-sm"
             >
-              <Skeleton className="h-40 w-full" />
-              <div className="space-y-3 p-4">
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-3 w-full" />
-                <Skeleton className="h-3 w-1/2" />
+              <div className="flex items-center gap-3 p-4">
+                <Skeleton className="h-10 w-10 rounded-full" />
+                <div className="flex-1 space-y-2">
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-3 w-1/2" />
+                </div>
+              </div>
+              <div className="space-y-2 px-4 pb-4">
+                <Skeleton className="h-3 w-2/3" />
+                <Skeleton className="h-3 w-1/3" />
               </div>
             </Card>
           ))}
@@ -120,17 +127,17 @@ export default function ProductsPage() {
 
       {isError && !isLoading && (
         <div className="rounded-md border border-destructive/40 bg-destructive/10 p-6 text-sm text-destructive">
-          Failed to load products.
+          Failed to load users.
         </div>
       )}
 
-      {!isLoading && !isError && filteredProducts.length === 0 && (
+      {!isLoading && !isError && filteredUsers.length === 0 && (
         <div className="rounded-lg border bg-card p-6 text-center text-sm text-muted-foreground">
-          No products match your search.
+          No users match your search.
         </div>
       )}
 
-      {!isLoading && !isError && filteredProducts.length > 0 && (
+      {!isLoading && !isError && filteredUsers.length > 0 && (
         <>
           <motion.div
             className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
@@ -138,66 +145,60 @@ export default function ProductsPage() {
             animate="animate"
             transition={{ staggerChildren: 0.04 }}
           >
-            {paginatedProducts.map((product) => (
+            {paginatedUsers.map((user) => (
               <motion.div
-                key={product.id}
+                key={user.id}
                 variants={cardVariants}
                 whileHover={{ y: -4, scale: 1.01 }}
                 transition={{ type: 'spring', stiffness: 220, damping: 18 }}
               >
-                <Card
-                  onClick={() => handleCardClick(product)}
-                  className="group cursor-pointer overflow-hidden rounded-xl border bg-card shadow-sm transition-colors duration-300 hover:shadow-xl"
-                >
-                  <CardHeader className="space-y-3">
-                    <div className="flex items-start justify-between gap-2">
-                      <h3 className="line-clamp-2 text-sm font-semibold leading-tight transition-colors group-hover:text-primary">
-                        {product.title}
-                      </h3>
+                <Card className="group flex flex-col overflow-hidden rounded-xl border bg-card shadow-sm transition-colors duration-300 hover:shadow-xl">
+                  <CardHeader className="flex flex-row items-center gap-3">
+                    <Avatar className="h-10 w-10 border bg-gradient-to-br from-primary/10 via-primary/5 to-primary/20 text-xs">
+                      <AvatarFallback className="text-[11px] font-medium uppercase">
+                        {getInitials(user.fullName)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col gap-0.5">
+                      <div className="flex items-center gap-1">
+                        <User2 className="h-3 w-3 text-muted-foreground" />
+                        <span className="line-clamp-1 text-sm font-semibold">
+                          {user.fullName}
+                        </span>
+                      </div>
+                      <span className="text-xs text-muted-foreground">
+                        @{user.username}
+                      </span>
+                    </div>
+                    <div className="ml-auto">
                       <Badge
                         variant="outline"
-                        className="shrink-0 text-[10px] capitalize"
-                        onClick={(e) => e.stopPropagation()}
+                        className="text-[10px] capitalize"
                       >
-                        {product.category}
+                        {user.city || 'Unknown'}
                       </Badge>
                     </div>
                   </CardHeader>
 
-                  <CardContent className="px-4 pb-0">
-                    <div className="flex justify-center">
-                      <img
-                        src={product.image}
-                        alt={product.title}
-                        className="h-36 object-contain transition-transform duration-300 group-hover:scale-110"
-                      />
+                  <CardContent className="space-y-2 px-4 pb-2">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <Mail className="h-3 w-3" />
+                      <span className="line-clamp-1">{user.email}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <Phone className="h-3 w-3" />
+                      <span className="line-clamp-1">{user.phone}</span>
                     </div>
                   </CardContent>
 
-                  <CardContent className="space-y-3 p-4">
-                    <p className="line-clamp-2 text-xs text-muted-foreground">
-                      {product.description}
-                    </p>
-
-                    <div className="flex items-center justify-between">
-                      <span className="text-base font-semibold">
-                        ${product.price.toFixed(2)}
-                      </span>
-                    </div>
-                  </CardContent>
-
-                  <CardFooter className="border-t bg-muted/40 p-4">
+                  <CardFooter className="mt-auto border-t bg-muted/40 p-4">
                     <Button
                       size="sm"
                       variant="secondary"
-                      className="flex w-full items-center justify-center gap-2 text-xs transition-colors group-hover:bg-primary group-hover:text-emerald-600"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleAddToCartAndGo(product);
-                      }}
+                      className="flex w-full items-center justify-center gap-2 text-xs transition-colors group-hover:bg-primary group-hover:text-emerald-700"
+                      onClick={() => goToOrders(user.id)}
                     >
-                      <ShoppingCart className="h-4 w-4" />
-                      Add to cart
+                      View orders
                     </Button>
                   </CardFooter>
                 </Card>
@@ -213,8 +214,8 @@ export default function ProductsPage() {
               transition={{ duration: 0.2 }}
             >
               <div className="text-xs text-muted-foreground">
-                Page {currentPage} of {totalPages} · {filteredProducts.length}{' '}
-                products
+                Page {currentPage} of {totalPages} · {filteredUsers.length}{' '}
+                users
               </div>
 
               <div className="flex items-center gap-2">
